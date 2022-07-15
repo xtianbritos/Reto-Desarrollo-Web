@@ -97,13 +97,12 @@ const mostrar = (listas) => {
 
 
 body.addEventListener("click", (e) => {
-    console.log(e.target.parentElement.parentElement.id);
     if (e.target.classList[0] == "EliminarTarea") {
         eliminarTarea(e.target.parentElement.parentElement.id)
     }
     if (e.target.classList[0] == "agregarSubList") {
 
-        //console.log(e.path[0].value);
+        console.log(e.path[0].value);
         let dato = {
             nombre: e.target.previousElementSibling.value,
             id: e.path[0].value
@@ -140,7 +139,6 @@ body.addEventListener("click", (e) => {
      * function validar , verifica el estado del check para cambiar el estado del boton editar
      */
     if (e.target.classList[0] == "validar") {
-        console.log(e.path[2].children[3].children[0].value);
         let btnvalidar = d.getElementById('editar' + e.path[2].children[3].children[0].value)
         let check = d.getElementById('validar' + e.path[2].children[3].children[0].value).checked
         if (check) {
@@ -157,7 +155,6 @@ body.addEventListener("click", (e) => {
 
 //funcion eliminar , recibe como parametro el ID
 async function eliminarTarea(id) {
-    console.log(id);
     let options = {
         method: "DELETE",
         headers: {
@@ -184,7 +181,8 @@ async function crearSubLista({ nombre, id }) {
                 }
             })
         },
-            res = await fetch(`${url}/listTask`, options)
+            res = await fetch(`${url}/listTask`, options),
+            json = await res.json()
         mostrarList()
     } else {
         alert("Ingrese una subLista porfavor!")
