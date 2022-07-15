@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Data
 @Entity
 @Table(name = "lista")
@@ -29,7 +28,7 @@ public class ListModel {
      * referencia la llave foranea de la clase lista tarea modelo
      */
     @JsonBackReference
-    private List<ListTaskModel>ListTask = new ArrayList<>();
+    private List<ListTaskModel> ListTask = new ArrayList<>();
 
 
 

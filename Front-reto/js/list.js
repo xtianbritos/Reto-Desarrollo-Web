@@ -3,14 +3,14 @@ const d = document,
     $title = d.getElementById("nombre-lista"),
     $crear = d.getElementById("crear"),
     body = d.querySelector('.tbody1'),
-    $input = d.getElementById('inputTarea').value
-const url = '';
-let resultado = ''
-let resultadoSub = ''
-let subtarea = {};
+    $input = d.getElementById('inputTarea').value;
+let resultado = '',
+    url = 'http://localhost:8080',
+    resultadoSub = '',
+    subtarea = {};
 
 
-//funcon boton crear , permite guardar en el input el nombre de la nueva lista a crear
+//funcion boton crear , permite guardar en el input el nombre de la nueva lista a crear
 $crear.addEventListener('click', e => {
     e.preventDefault();
     crearList(d.getElementById('inputTarea').value)
@@ -21,7 +21,9 @@ async function crearList(lista) {
     if (lista) {
         let options = {
             method: "POST",
-            
+            headers: {
+                "Content-type": "application/json; charset=utf-8"
+            },
             body: JSON.stringify({
                 name: lista
             })
@@ -35,11 +37,12 @@ async function crearList(lista) {
 
 //muestra las listas en la BD
 async function mostrarList() {
-    let res = await fetch(`${url}/listas`)
-    let data = await res.json()
-        .catch(error => console.log(error))
-    mostrar(data)
-    
+    try{
+        let res = await fetch(`${url}/listas`)
+        let data = await res.json()
+        mostrar(data)}
+    catch (error){
+            console.log(error)}
 }
 mostrarList()
 
@@ -192,6 +195,7 @@ async function eliminarSubTarea(id) {
     let options = {
         method: "DELETE",
         
+    }
     mostrarList()
 }
 /**
