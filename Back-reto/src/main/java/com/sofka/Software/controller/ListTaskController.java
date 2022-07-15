@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 public class ListTaskController {
     @Autowired
@@ -26,10 +26,8 @@ public class ListTaskController {
 
     @PutMapping(path = "/listTask/{id}")
     public ListTaskModel updatelistTask(@RequestBody ListTaskModel listTask, @PathVariable(value="id") Long id ) {
-        listTaskService.updateListTask(id, listTask);
-        return null;
+        return listTaskService.updateListTask(id, listTask);
     }
-
 
     /**
      *

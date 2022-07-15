@@ -130,7 +130,6 @@ body.addEventListener("click", (e) => {
         let boton = d.getElementById('Actualizar' + e.path[4].id)
         btncrear.style.display = "none";
         boton.style.display = "";
-        console.log(e.path[4]);
         input.value = subtarea.name
     }
     /**
@@ -146,9 +145,13 @@ body.addEventListener("click", (e) => {
         }
 
     }
-
-
-
+    /**
+     * actualizar subtarea
+    */
+     if (e.target.classList[0] == "actualizarSubList") {
+        let nuevoNombre = e.path[1].querySelector(".form-control").value
+         actualizarSubTarea(subtarea.id, subtarea.idpadre, nuevoNombre)
+    }
 })
 
 //funcion eliminar , recibe como parametro el ID
@@ -179,8 +182,7 @@ async function crearSubLista({ nombre, id }) {
                 }
             })
         },
-            res = await fetch(`${url}/listTask`, options),
-            json = await res.json()
+            res = await fetch(`${url}/listTask`, options)
         mostrarList()
     } else {
         alert("Ingrese una subLista porfavor!")
@@ -199,21 +201,21 @@ async function eliminarSubTarea(id) {
     mostrarList()
 }
 
-/**
- * Editar sub lista 
- * @param {*} id1 
- * @param {*} id2 
- * @param {*} nombre 
- */
-
-
-
-
-
-
-
-
-
-
-
-
+//editar sub lista
+ async function actualizarSubTarea(idTask, idListTask, nombre) {
+    let options = {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json; charset=utf-8"
+        },
+        body: JSON.stringify({
+            completed: true,
+            name: nombre,
+            listaid: {
+                id: idListTask
+            }
+        })
+    },
+        res = await fetch(`${url}/listTask/${idTask}`, options)
+    mostrarList()
+}
