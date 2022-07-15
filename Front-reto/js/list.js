@@ -101,8 +101,6 @@ body.addEventListener("click", (e) => {
         eliminarTarea(e.target.parentElement.parentElement.id)
     }
     if (e.target.classList[0] == "agregarSubList") {
-
-        console.log(e.path[0].value);
         let dato = {
             nombre: e.target.previousElementSibling.value,
             id: e.path[0].value
@@ -192,10 +190,15 @@ async function crearSubLista({ nombre, id }) {
 async function eliminarSubTarea(id) {
     let options = {
         method: "DELETE",
+        headers: {
+            "Content-type": "application/json; charset=utf-8"
+        },
+    },
+        res = await fetch(`${url}/listTask/${id}`, options)
         
-    }
     mostrarList()
 }
+
 /**
  * Editar sub lista 
  * @param {*} id1 
