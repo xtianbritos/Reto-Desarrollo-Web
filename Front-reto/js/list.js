@@ -7,7 +7,10 @@ const d = document,
 let resultado = '',
     url = 'http://localhost:8080',
     resultadoSub = '',
-    subtarea = {};
+    subtarea = {},
+    chequeado = false,
+    estado = '',
+    editable = '';
 
 
 //funcion boton crear , permite guardar en el input el nombre de la nueva lista a crear
@@ -52,15 +55,24 @@ const mostrar = (listas) => {
     listas.forEach(lista => {
         resultadoSub = ''
         lista.listTask.forEach(sub => {
+
+            if(sub.completed == true){
+                estado = "checked"
+                editable = "disabled"
+            }else{
+                estado = ''
+                editable = ''
+            }
+
             resultadoSub += ` <tr>
                 <td class="id">${sub.id}</td>
                 <td class="Tarea">${sub.name}</td>
                 <td class="completado">
-                    <input class="validar form-check-input" id="validar${sub.id}" type="checkbox" id="flexSwitchCheckDefault">
+                    <input class="validar form-check-input" id="validar${sub.id}" type="checkbox" id="flexSwitchCheckDefault" ${estado}>
                     <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                 </td>
                 <td class="opciones">
-                    <button class="editar btn btn-info" value="${sub.id}" type="button" id="editar${sub.id}" class="editar btn btn-secondary">Editar</button>
+                    <button class="editar btn btn-info" value="${sub.id}" type="button" id="editar${sub.id}" class="editar btn btn-secondary" ${editable}>Editar</button>
                     <button class="eliminar btn btn-danger" type="button" id="eliminar${sub.id}" >Eliminar</button>
                 </td>
             </tr>`
@@ -140,8 +152,12 @@ body.addEventListener("click", (e) => {
         let check = d.getElementById('validar' + e.path[2].children[3].children[0].value).checked
         if (check) {
             btnvalidar.disabled = true;
+            chequeado = true;
+            actualizarSubTarea(e.path[2].children[3].children[0].value, e.path[5].id, e.path[2].children[1].textContent)
         } else {
             btnvalidar.disabled = false;
+            chequeado = false;
+            actualizarSubTarea(e.path[2].children[3].children[0].value, e.path[5].id, e.path[2].children[1].textContent)
         }
 
     }
@@ -151,6 +167,7 @@ body.addEventListener("click", (e) => {
      if (e.target.classList[0] == "actualizarSubList") {
         let nuevoNombre = e.path[1].querySelector(".form-control").value
          actualizarSubTarea(subtarea.id, subtarea.idpadre, nuevoNombre)
+        location.reload()
     }
 })
 
@@ -209,7 +226,7 @@ async function eliminarSubTarea(id) {
             "Content-type": "application/json; charset=utf-8"
         },
         body: JSON.stringify({
-            completed: true,
+            completed: chequeado,
             name: nombre,
             listaid: {
                 id: idListTask
@@ -217,5 +234,4 @@ async function eliminarSubTarea(id) {
         })
     },
         res = await fetch(`${url}/listTask/${idTask}`, options)
-    mostrarList()
 }
